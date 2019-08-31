@@ -1,0 +1,37 @@
+server:
+  port: 8081
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  application:
+    name: minitou-api # 指定服务名称
+  datasource:
+    # url: jdbc:mysql://132.232.104.247:3306/tensquare_blog?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    # 不显式设置字符集，集成服务器配置，服务器的mysql已经设置为utf8mb4
+    url: jdbc:mysql://132.232.104.247:3306/wx_migutou_video?useUnicode=true&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: '!QAZ2wsx'
+    type: com.alibaba.druid.pool.DruidDataSource
+    platform: mysql
+    druid:
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      stat-view-servlet:
+        allow: true
+# mybatis配置
+mybatis:
+  type-aliases-package: com.wx.mini.pojo
+  mapper-locations: classpath*:mapper/*.xml
+# 通用mapper配置
+mapper:
+#  mappers: com.wx.mini.utis.Mymapper
+  not-empty: false
+  identity: MYSQL
+#分页插件配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  params: count=countsql
+  supportMethodsArguments: true
