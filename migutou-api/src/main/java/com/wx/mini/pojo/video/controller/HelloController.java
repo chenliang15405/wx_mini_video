@@ -1,4 +1,4 @@
-package com.wx.mini.video.controller;
+package com.wx.mini.pojo.video.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

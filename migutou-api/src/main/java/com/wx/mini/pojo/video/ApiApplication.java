@@ -1,4 +1,4 @@
-package com.wx.mini.video;
+package com.wx.mini.pojo.video;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

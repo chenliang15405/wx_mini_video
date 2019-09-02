@@ -26,7 +26,7 @@ mybatis:
   mapper-locations: classpath*:mapper/*.xml
 # 通用mapper配置
 mapper:
-#  mappers: com.wx.mini.utis.Mymapper
+  mappers: com.wx.mini.utils.MyMapper
   not-empty: false
   identity: MYSQL
 #分页插件配置
