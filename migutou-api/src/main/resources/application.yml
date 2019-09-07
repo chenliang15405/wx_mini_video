@@ -47,3 +47,8 @@ pagehelper:
   reasonable: true
   params: count=countsql
   supportMethodsArguments: true
+# 用户业务配置
+user:
+  upload:
+    face:
+      fileSpace: /Users/alan.chen/Desktop/dmsData

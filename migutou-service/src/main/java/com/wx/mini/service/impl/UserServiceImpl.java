@@ -7,12 +7,14 @@ import com.wx.mini.service.UserService;
 import com.wx.mini.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 /**
  * @auther alan.chen
  * @time 2019/9/4 10:20 PM
  */
+@Transactional
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -59,6 +61,22 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
         }
         return null;
+    }
+
+    @Override
+    public void update(Users user) {
+        Example example = new Example(Users.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("id", user.getId());
+        usersMapper.updateByExampleSelective(user, example);
+    }
+
+    @Override
+    public Users findById(String userId) {
+        Example example = new Example(Users.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("id", userId);
+        return usersMapper.selectOneByExample(example);
     }
 
 }

@@ -12,4 +12,8 @@ public interface UserService {
     void saveUserInfo(Users users);
 
     Users loginWithUsernamePassword(String username, String password);
+
+    void update(Users user);
+
+    Users findById(String userId);
 }

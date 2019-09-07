@@ -6,6 +6,7 @@ import com.wx.mini.utils.IMoocJSONResult;
 import com.wx.mini.utils.RedisOperator;
 import com.wx.mini.vo.UserVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -66,14 +67,21 @@ public class RegistLoginController {
 		if(user == null) {
 			return IMoocJSONResult.errorMsg("用户名或密码错误");
 		}
-		users.setPassword("");
-		UserVo userVo = setUserToken(users);
+		user.setPassword("");
+		UserVo userVo = setUserToken(user);
 
 		return IMoocJSONResult.ok(userVo);
 	}
 
+	@ApiOperation(value="用户注销", notes="用户注销的接口")
+	@ApiImplicitParam(name="userId", value="用户id", required=true, dataType="String", paramType="query")
+	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	public IMoocJSONResult logout(String userId) {
+		redisOperator.del(REDIS_USER_SESSION_TOKEN + ":" + userId);
+		return IMoocJSONResult.ok();
+	}
 
-
+	// 设置token
 	public UserVo setUserToken(Users users) {
 		String token = UUID.randomUUID().toString();
 		redisOperator.set(REDIS_USER_SESSION_TOKEN + ":" + users.getId(), token, REDIS_USER_SESSION_TOKEN_EXPIRE_TIME);
