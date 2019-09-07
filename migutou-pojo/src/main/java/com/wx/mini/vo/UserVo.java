@@ -1,16 +1,13 @@
-package com.wx.mini.pojo;
+package com.wx.mini.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 
 @ApiModel(value = "用户注册对象")
-public class Users {
+public class UserVo {
 
     @ApiModelProperty(hidden = true)
-    @Id
     private String id;
 
     @ApiModelProperty(value = "用户名",name = "username", example = "wxuser",required = true)
@@ -20,21 +17,20 @@ public class Users {
     private String password;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "FACE_IMAGE")
+    private String userToken;
+
+    @ApiModelProperty(hidden = true)
     private String faceImage;
 
     private String nickname;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "FANS_COUNTS")
     private Integer fansCounts;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "FOLLOW_COUNTS")
     private Integer followCounts;
 
     @ApiModelProperty(hidden = true)
-    @Column(name = "RECEIVE_LIKE_COUNTS")
     private Integer receiveLikeCounts;
 
     public String getId() {
@@ -59,6 +55,14 @@ public class Users {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
     }
 
     public String getFaceImage() {

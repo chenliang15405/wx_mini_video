@@ -20,6 +20,18 @@ spring:
       max-active: 20
       stat-view-servlet:
         allow: true
+  # redis配置
+  redis:
+    host: 132.232.104.247
+    port: 6379
+    password: admin # 默认为空
+    database: 1
+    pool:
+      max-active: 1000
+      max-wait: -1 # 没有限制
+      max-idle: 10
+      min-idle: 2
+    timeout: 0
 # mybatis配置
 mybatis:
   type-aliases-package: com.wx.mini.pojo
