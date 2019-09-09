@@ -52,3 +52,5 @@ user:
   upload:
     face:
       fileSpace: /Users/alan.chen/Desktop/dmsData
+ffmpeg:
+  path: /Users/alan.chen/Documents/notes/ffmpeg
