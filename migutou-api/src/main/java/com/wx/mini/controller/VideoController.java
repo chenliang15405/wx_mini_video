@@ -1,6 +1,5 @@
 package com.wx.mini.controller;
 
-import com.wx.mini.service.BgmService;
 import com.wx.mini.service.VideoService;
 import com.wx.mini.utils.IMoocJSONResult;
 import io.swagger.annotations.*;
@@ -54,6 +53,7 @@ public class VideoController {
         String uploadFilePath = null;
         // 前端页面显示路径和数据库保存路径
         String mvcShowPath = File.separator + userId + "/video";
+        String videoCoverPath = null;
         try {
             if(file != null) {
                 String fileName = file.getOriginalFilename();
@@ -84,12 +84,14 @@ public class VideoController {
 
         if(StringUtils.isNotBlank(bgmId)) {
             mvcShowPath = videoService.mergeBgmAndVideo(bgmId, userId, mvcShowPath, uploadFilePath, videoSeconds);
-
             log.info("视频上传完成  ", mvcShowPath);
+
+            //上传视频封面
+            videoCoverPath = videoService.uploadVideoCoverPath(mvcShowPath);
 
         }
         // 保存video信息到数据库
-        String videoId = videoService.saveVideo(bgmId, userId, videoSeconds, videoHeight, videoWidth, desc, mvcShowPath);
+        String videoId = videoService.saveVideo(bgmId, userId, videoSeconds, videoHeight, videoWidth, desc, mvcShowPath, videoCoverPath);
 
         return IMoocJSONResult.ok(videoId);
     }

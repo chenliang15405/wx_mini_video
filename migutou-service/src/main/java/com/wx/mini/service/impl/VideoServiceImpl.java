@@ -7,8 +7,8 @@ import com.wx.mini.pojo.Videos;
 import com.wx.mini.service.BgmService;
 import com.wx.mini.service.VideoService;
 import com.wx.mini.utils.FFMpegCommon;
+import com.wx.mini.utils.FetchVideoCover;
 import com.wx.mini.vo.VideoStatusEnum;
-import groovy.util.logging.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,6 @@ import java.util.UUID;
  * @auther alan.chen
  * @time 2019/9/10 9:50 AM
  */
-@Slf4j
 @Service
 public class VideoServiceImpl implements VideoService {
 
@@ -91,7 +90,7 @@ public class VideoServiceImpl implements VideoService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public String saveVideo(String bgmId, String userId, double videoSeconds, int videoHeight, int videoWidth, String desc, String mvcShowPath) {
+    public String saveVideo(String bgmId, String userId, double videoSeconds, int videoHeight, int videoWidth, String desc, String mvcShowPath, String videoCoverPath) {
         Videos videos = new Videos();
         String id = Sid.next();
         videos.setId(id);
@@ -105,7 +104,9 @@ public class VideoServiceImpl implements VideoService {
         videos.setVideoPath(mvcShowPath);
         videos.setLikeCounts(0L);
         videos.setStatus(VideoStatusEnum.SUCCESS.value);
+        videos.setCoverPath(videoCoverPath);
         videosMapper.insertSelective(videos);
+
         return id;
     }
 
@@ -120,6 +121,25 @@ public class VideoServiceImpl implements VideoService {
         videos.setId(videoId);
         videos.setCoverPath(mvcShowPath);
         videosMapper.updateByPrimaryKeySelective(videos);
+    }
+
+    /**
+     * 获取视频封面截图
+     *
+     * @param mvcVideoShowPath
+     * @return
+     */
+    @Override
+    public String uploadVideoCoverPath(String mvcVideoShowPath) {
+        String videoFilePath = fileSpace + mvcVideoShowPath;
+        String videoFileName = mvcVideoShowPath.split("\\.")[0];
+        String videoCoverDBPath = videoFileName + ".jpg";
+        String videoCoverPath = fileSpace + videoCoverDBPath;
+
+        FetchVideoCover ffmpeg = FetchVideoCover.builder(FFMPEG_EXE);
+        ffmpeg.getVideoCover(videoFilePath, videoCoverPath);
+
+        return videoCoverDBPath;
     }
 
 
