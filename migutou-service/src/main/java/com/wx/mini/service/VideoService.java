@@ -1,6 +1,9 @@
 package com.wx.mini.service;
 
+import com.wx.mini.pojo.Videos;
 import com.wx.mini.utils.PagedResult;
+
+import java.util.List;
 
 /**
  * @auther alan.chen
@@ -16,5 +19,8 @@ public interface VideoService {
 
     String uploadVideoCoverPath(String mvcVideoShowPath);
 
-    PagedResult getAllVideosByPage(int page, int pageSize);
+    PagedResult getAllVideosByPage(Videos video, Integer isSaveKeyboard, int page, int pageSize);
+
+    List<String> getHotList();
+
 }

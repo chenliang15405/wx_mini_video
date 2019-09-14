@@ -3,9 +3,11 @@ package com.wx.mini.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wx.mini.idworker.Sid;
+import com.wx.mini.mapper.SearchRecordsMapper;
 import com.wx.mini.mapper.VideosMapper;
 import com.wx.mini.mapper.VideosMapperCustomer;
 import com.wx.mini.pojo.Bgm;
+import com.wx.mini.pojo.SearchRecords;
 import com.wx.mini.pojo.Videos;
 import com.wx.mini.service.BgmService;
 import com.wx.mini.service.VideoService;
@@ -36,9 +38,14 @@ public class VideoServiceImpl implements VideoService {
     private VideosMapper videosMapper;
     @Autowired
     private VideosMapperCustomer videosMapperCustomer;
+    @Autowired
+    private SearchRecordsMapper searchRecordsMapper;
 
     @Autowired
     private BgmService bgmService;
+
+    @Autowired
+    private Sid sid;
 
     @Value("${user.upload.face.fileSpace}")
     private String fileSpace;
@@ -157,12 +164,23 @@ public class VideoServiceImpl implements VideoService {
      * @param pageSize
      * @return
      */
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public PagedResult getAllVideosByPage(int page, int pageSize) {
+    public PagedResult getAllVideosByPage(Videos video, Integer isSaveKeyboard, int page, int pageSize) {
+        String videoDesc = video.getVideoDesc();
+
+        if(isSaveKeyboard != null && isSaveKeyboard == 1) {
+            SearchRecords records = new SearchRecords();
+            String id = sid.nextShort();
+            records.setId(id);
+            records.setContent(videoDesc);
+            searchRecordsMapper.insert(records);
+        }
+
         // pageHelper的分页，是通过在执行Sql的时候，进行拦截，对不同的数据库执行不同的分页方法，相当于aop,
         // 然后查询的时候正常查询，查询全部数据即可，会通过pageHelper拦截封装之后，返回当前分页数据
         PageHelper.startPage(page, pageSize);
-        List<VideoVo> list = videosMapperCustomer.queryAllVideos();
+        List<VideoVo> list = videosMapperCustomer.queryAllVideos(videoDesc);
 
         PageInfo<VideoVo> info = new PageInfo<>(list);
         PagedResult result = new PagedResult();
@@ -173,6 +191,16 @@ public class VideoServiceImpl implements VideoService {
         result.setRows(list);
 
         return result;
+    }
+
+    /**
+     * 搜索关键词列表
+     * @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<String> getHotList() {
+        return searchRecordsMapper.getHotList();
     }
 
 

@@ -8,4 +8,11 @@
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
   </resultMap>
+
+
+  <!--直接返回一个类型，则使用resultType 如果返回的是需要封装为一个对象，那么使用resultMap，需要定义该map映射-->
+  <select id="getHotList" resultType="String">
+    select content from search_records group by content order by count(content) desc
+  </select>
+
 </mapper>

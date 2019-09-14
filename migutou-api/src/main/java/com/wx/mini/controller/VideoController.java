@@ -100,7 +100,7 @@ public class VideoController {
     /**
      * 获取分页video列表，并通过关键字搜索时分页查询且保存关键词
      *
-     * @param videos
+     * @param video
      * @param isSaveKeyboard
      * @param page
      * @return
@@ -109,15 +109,26 @@ public class VideoController {
             @ApiImplicitParam(name = "isSaveKeyboard", value = "是否需要保存关键词", required = true, dataType = "Integer", paramType = "form"),
             @ApiImplicitParam(name = "page", value = "当前页数", required = true, dataType = "Integer", paramType = "form"),
     })
-    @GetMapping("/showAll")
+    @PostMapping("/showAll")
     public IMoocJSONResult pageVideos(@RequestBody Videos video, Integer isSaveKeyboard, Integer page) {
         if(page == null) {
             page = 1;
         }
         Integer pageSize = 5;
-        PagedResult pagedResult = videoService.getAllVideosByPage(page, pageSize);
+        PagedResult pagedResult = videoService.getAllVideosByPage(video, isSaveKeyboard, page, pageSize);
         return IMoocJSONResult.ok(pagedResult);
     }
+
+    /**
+     * 查询热门搜索关键词列表
+     * @return
+     */
+    @GetMapping("/hot/search")
+    public IMoocJSONResult hotList() {
+        return IMoocJSONResult.ok(videoService.getHotList());
+    }
+
+
 
 
 

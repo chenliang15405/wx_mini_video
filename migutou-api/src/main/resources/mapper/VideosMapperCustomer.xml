@@ -23,10 +23,14 @@
 
   </resultMap>
 
-  <select id="queryAllVideos" resultMap="BaseResultMap">
+  <select id="queryAllVideos" resultMap="BaseResultMap" parameterType="String">
     select v.*, u.face_image as face_image,u.nickname as nickname from videos v
       left join users u on v.user_id = u.id
-    where v.status = 1
+    where 1 = 1
+          and v.status = 1
+          <if test="videoDesc != null and videoDesc != ''">
+            and v.video_desc like '%${videoDesc}%'
+          </if>
     order by v.create_time desc
 
   </select>
