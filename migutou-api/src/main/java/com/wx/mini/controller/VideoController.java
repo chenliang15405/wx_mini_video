@@ -1,16 +1,16 @@
 package com.wx.mini.controller;
 
+import com.wx.mini.pojo.Videos;
 import com.wx.mini.service.VideoService;
 import com.wx.mini.utils.IMoocJSONResult;
+import com.wx.mini.utils.PagedResult;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -94,6 +94,29 @@ public class VideoController {
         String videoId = videoService.saveVideo(bgmId, userId, videoSeconds, videoHeight, videoWidth, desc, mvcShowPath, videoCoverPath);
 
         return IMoocJSONResult.ok(videoId);
+    }
+
+
+    /**
+     * 获取分页video列表，并通过关键字搜索时分页查询且保存关键词
+     *
+     * @param videos
+     * @param isSaveKeyboard
+     * @param page
+     * @return
+     */
+    @ApiImplicitParams({ // query表示该参数是在url上面拼接的，path是路径上面的， form是表单中的参数
+            @ApiImplicitParam(name = "isSaveKeyboard", value = "是否需要保存关键词", required = true, dataType = "Integer", paramType = "form"),
+            @ApiImplicitParam(name = "page", value = "当前页数", required = true, dataType = "Integer", paramType = "form"),
+    })
+    @GetMapping("/showAll")
+    public IMoocJSONResult pageVideos(@RequestBody Videos video, Integer isSaveKeyboard, Integer page) {
+        if(page == null) {
+            page = 1;
+        }
+        Integer pageSize = 5;
+        PagedResult pagedResult = videoService.getAllVideosByPage(page, pageSize);
+        return IMoocJSONResult.ok(pagedResult);
     }
 
 

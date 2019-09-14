@@ -1,14 +1,19 @@
 package com.wx.mini.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wx.mini.idworker.Sid;
 import com.wx.mini.mapper.VideosMapper;
+import com.wx.mini.mapper.VideosMapperCustomer;
 import com.wx.mini.pojo.Bgm;
 import com.wx.mini.pojo.Videos;
 import com.wx.mini.service.BgmService;
 import com.wx.mini.service.VideoService;
 import com.wx.mini.utils.FFMpegCommon;
 import com.wx.mini.utils.FetchVideoCover;
+import com.wx.mini.utils.PagedResult;
 import com.wx.mini.vo.VideoStatusEnum;
+import com.wx.mini.vo.VideoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -28,6 +34,8 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private VideosMapper videosMapper;
+    @Autowired
+    private VideosMapperCustomer videosMapperCustomer;
 
     @Autowired
     private BgmService bgmService;
@@ -140,6 +148,31 @@ public class VideoServiceImpl implements VideoService {
         ffmpeg.getVideoCover(videoFilePath, videoCoverPath);
 
         return videoCoverDBPath;
+    }
+
+    /**
+     * 分页查询，通过pageHelper和封装的pagedResult
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PagedResult getAllVideosByPage(int page, int pageSize) {
+        // pageHelper的分页，是通过在执行Sql的时候，进行拦截，对不同的数据库执行不同的分页方法，相当于aop,
+        // 然后查询的时候正常查询，查询全部数据即可，会通过pageHelper拦截封装之后，返回当前分页数据
+        PageHelper.startPage(page, pageSize);
+        List<VideoVo> list = videosMapperCustomer.queryAllVideos();
+
+        PageInfo<VideoVo> info = new PageInfo<>(list);
+        PagedResult result = new PagedResult();
+
+        result.setPage(page);
+        result.setTotalPages(info.getPages());
+        result.setRecords(info.getTotal());
+        result.setRows(list);
+
+        return result;
     }
 
 

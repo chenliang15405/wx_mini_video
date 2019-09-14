@@ -1,5 +1,7 @@
 package com.wx.mini.service;
 
+import com.wx.mini.utils.PagedResult;
+
 /**
  * @auther alan.chen
  * @time 2019/9/10 9:50 AM
@@ -13,4 +15,6 @@ public interface VideoService {
     void updateVideoCoverUrl(String videoId, String mvcShowPath);
 
     String uploadVideoCoverPath(String mvcVideoShowPath);
+
+    PagedResult getAllVideosByPage(int page, int pageSize);
 }
