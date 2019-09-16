@@ -159,6 +159,7 @@ public class FFMpegCommon {
 
     /**
      * 真正将没有背景音乐的video转换为有背景音乐video
+     * 无声视频加上背景音乐
      *
      * @param videoOutPath
      * @param noSoundVideoPath
@@ -283,6 +284,50 @@ public class FFMpegCommon {
             InputStream errorStream = process.getErrorStream();
             releaseErrorStream(errorStream);
 
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    /**
+     * 保留视频原声合成音频
+     *
+     * @param bgm
+     * @param inputVideo
+     * @param outputVideo
+     * @param seconds
+     * @return
+     */
+    public boolean mergeVideoAndBgm(String bgm, String inputVideo, String outputVideo, double seconds) {
+//     保留原声合并音视频 ffmpeg -i bgm.mp3 -i input.mp4 -t 6 -filter_complex amix=inputs=2 output.mp4
+        try {
+            List<String> commands = Lists.newArrayList();
+            commands.add(ffmpegEXE);
+
+            commands.add("-i");
+            commands.add(bgm);
+
+            commands.add("-i");
+            commands.add(inputVideo);
+
+            commands.add("-t");
+            commands.add(String.valueOf(seconds));
+
+            commands.add("-filter_complex");
+            commands.add("amix=inputs=2");
+
+            commands.add("-y");
+            commands.add(outputVideo);
+
+            ProcessBuilder builder= new ProcessBuilder(commands);
+            Process process = builder.start();
+
+            // 获取到error流
+            InputStream errorStream = process.getErrorStream();
+            releaseErrorStream(errorStream);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
