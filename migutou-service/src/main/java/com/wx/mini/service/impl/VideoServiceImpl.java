@@ -3,12 +3,8 @@ package com.wx.mini.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wx.mini.idworker.Sid;
-import com.wx.mini.mapper.SearchRecordsMapper;
-import com.wx.mini.mapper.VideosMapper;
-import com.wx.mini.mapper.VideosMapperCustomer;
-import com.wx.mini.pojo.Bgm;
-import com.wx.mini.pojo.SearchRecords;
-import com.wx.mini.pojo.Videos;
+import com.wx.mini.mapper.*;
+import com.wx.mini.pojo.*;
 import com.wx.mini.service.BgmService;
 import com.wx.mini.service.VideoService;
 import com.wx.mini.utils.FFMpegCommon;
@@ -21,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.File;
 import java.util.Date;
@@ -40,6 +37,10 @@ public class VideoServiceImpl implements VideoService {
     private VideosMapperCustomer videosMapperCustomer;
     @Autowired
     private SearchRecordsMapper searchRecordsMapper;
+    @Autowired
+    private UsersLikeVideosMapper usersLikeVideosMapper;
+    @Autowired
+    private UsersMapper usersMapper;
 
     @Autowired
     private BgmService bgmService;
@@ -201,6 +202,48 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public List<String> getHotList() {
         return searchRecordsMapper.getHotList();
+    }
+
+    /**
+     * 视频点赞操作
+     *
+     * @param videoId
+     * @param publisherId
+     * @param userId
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void likeVideo(String videoId, String publisherId, String userId) {
+        // user_like_video 关系表插入数据
+        UsersLikeVideos ulv = new UsersLikeVideos();
+        String id = sid.nextShort();
+        ulv.setId(id);
+        ulv.setUserId(userId);
+        ulv.setVideoId(videoId);
+        usersLikeVideosMapper.insert(ulv);
+        // user表增加like count
+        usersMapper.addReceiveLikeCount(publisherId);
+        // video表增加 like count
+        videosMapper.addLikeCount(videoId);
+    }
+
+    /**
+     * 视频取消点赞操作
+     * @param videoId
+     * @param publisherId
+     * @param userId
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void unLikeVideo(String videoId, String publisherId, String userId) {
+        Example example = new Example(UsersLikeVideos.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId", userId);
+        criteria.andEqualTo("videoId", videoId);
+        usersLikeVideosMapper.deleteByExample(example);
+
+        usersMapper.reduceReceiveLikeCount(publisherId);
+        videosMapper.reduceLikeCount(videoId);
     }
 
 

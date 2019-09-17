@@ -23,4 +23,7 @@ public interface VideoService {
 
     List<String> getHotList();
 
+    void likeVideo(String videoId, String publisherId, String userId);
+
+    void unLikeVideo(String videoId, String publisherId, String userId);
 }

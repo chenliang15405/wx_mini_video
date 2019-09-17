@@ -16,4 +16,6 @@ public interface UserService {
     void update(Users user);
 
     Users findById(String userId);
+
+    boolean isLikeUserVideo(String loginUserId, String videoId);
 }

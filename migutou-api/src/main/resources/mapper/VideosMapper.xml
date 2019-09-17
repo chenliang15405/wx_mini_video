@@ -18,4 +18,13 @@
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <update id="addLikeCount" parameterType="String">
+    update videos set like_counts = like_counts + 1 where id = #{videoId}
+  </update>
+
+  <update id="reduceLikeCount" parameterType="String">
+    update videos set like_counts = like_counts - 1 where id = #{videoId}
+  </update>
+
 </mapper>

@@ -1,9 +1,13 @@
 package com.wx.mini.controller;
 
+import com.wx.mini.pojo.Users;
 import com.wx.mini.pojo.Videos;
+import com.wx.mini.service.UserService;
 import com.wx.mini.service.VideoService;
 import com.wx.mini.utils.IMoocJSONResult;
 import com.wx.mini.utils.PagedResult;
+import com.wx.mini.vo.PublisherVo;
+import com.wx.mini.vo.UserVo;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -123,11 +127,61 @@ public class VideoController {
      * 查询热门搜索关键词列表
      * @return
      */
+    @ApiOperation(value = "查询热门搜索列表", notes = "查询热门搜索列表接口")
     @GetMapping("/hot/search")
     public IMoocJSONResult hotList() {
         return IMoocJSONResult.ok(videoService.getHotList());
     }
 
+
+    /**
+     * 视频点赞
+     *
+     * @param videoId 点赞的视频id
+     * @param publisherId 发布视频用户id
+     * @param userId 当前操作用户id
+     * @return
+     */
+    @ApiOperation(value = "查询热门搜索列表", notes = "查询热门搜索列表接口")
+    @ApiImplicitParams({ // query表示该参数是在url上面拼接的，path是路径上面的， form是表单中的参数
+            @ApiImplicitParam(name = "videoId", value = "视频id", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "publisherId", value = "视频发布者用户id", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "userId", value = "登录用户ID", required = true, dataType = "String", paramType = "form"),
+    })
+    @PostMapping("/like")
+    public IMoocJSONResult likeVideo(@RequestParam("videoId") String videoId,
+                                     @RequestParam("publisherId") String publisherId,@RequestParam("userId") String userId) {
+        if(StringUtils.isBlank(videoId) || StringUtils.isBlank(publisherId) || StringUtils.isBlank(userId)) {
+            return IMoocJSONResult.errorMsg("用户数据异常");
+        }
+        videoService.likeVideo(videoId, publisherId, userId);
+
+        return IMoocJSONResult.ok();
+    }
+
+    /**
+     * 视频取消点赞
+     *
+     * @param videoId 点赞的视频id
+     * @param publisherId 发布视频用户id
+     * @param userId 当前操作用户id
+     * @return
+     */
+    @ApiImplicitParams({ // query表示该参数是在url上面拼接的，path是路径上面的， form是表单中的参数
+            @ApiImplicitParam(name = "videoId", value = "视频id", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "publisherId", value = "视频发布者用户id", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "userId", value = "登录用户ID", required = true, dataType = "String", paramType = "form"),
+    })
+    @PostMapping("/unlike")
+    public IMoocJSONResult unLikeVideo(@RequestParam("videoId") String videoId,
+                                     @RequestParam("publisherId") String publisherId,@RequestParam("userId") String userId) {
+        if(StringUtils.isBlank(videoId) || StringUtils.isBlank(publisherId) || StringUtils.isBlank(userId)) {
+            return IMoocJSONResult.errorMsg("用户数据异常");
+        }
+        videoService.unLikeVideo(videoId, publisherId, userId);
+
+        return IMoocJSONResult.ok();
+    }
 
 
 

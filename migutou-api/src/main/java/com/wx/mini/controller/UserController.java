@@ -3,9 +3,11 @@ package com.wx.mini.controller;
 import com.wx.mini.pojo.Users;
 import com.wx.mini.service.UserService;
 import com.wx.mini.utils.IMoocJSONResult;
+import com.wx.mini.vo.PublisherVo;
 import com.wx.mini.vo.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -92,6 +94,40 @@ public class UserController {
 
         UserVo vo = new UserVo();
         BeanUtils.copyProperties(user, vo);
+        return IMoocJSONResult.ok(vo);
+    }
+
+    /**
+     * 查询视频发布者信息
+     *
+     * @param loginUserId
+     * @param publisherId
+     * @param videoId
+     * @return
+     */
+    @ApiImplicitParams({ // query表示该参数是在url上面拼接的，path是路径上面的， form是表单中的参数
+            @ApiImplicitParam(name = "videoId", value = "视频id", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "publisherId", value = "视频发布者用户id", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "loginUserId", value = "登录用户ID", required = true, dataType = "String", paramType = "form"),
+    })
+    @GetMapping("/queryPublisher")
+    public IMoocJSONResult queryPublisher(@RequestParam("loginUserId") String loginUserId,
+                                          @RequestParam("publisherId") String publisherId,@RequestParam("videoId") String videoId) {
+        if(StringUtils.isBlank(videoId) || StringUtils.isBlank(publisherId) || StringUtils.isBlank(loginUserId)) {
+            return IMoocJSONResult.errorMsg("用户数据异常");
+        }
+        // 查询发布者用户数据
+        Users user = userService.findById(publisherId);
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user, userVo);
+
+        // 查询登录用户和视频发布者是否点赞
+        boolean isLike = userService.isLikeUserVideo(loginUserId, videoId);
+
+        PublisherVo vo = new PublisherVo();
+        vo.setUserVo(userVo);
+        vo.setLikeVideo(isLike);
+
         return IMoocJSONResult.ok(vo);
     }
 

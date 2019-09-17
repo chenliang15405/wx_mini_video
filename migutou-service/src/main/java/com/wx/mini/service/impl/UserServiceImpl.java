@@ -1,14 +1,18 @@
 package com.wx.mini.service.impl;
 
 import com.wx.mini.idworker.Sid;
+import com.wx.mini.mapper.UsersLikeVideosMapper;
 import com.wx.mini.mapper.UsersMapper;
 import com.wx.mini.pojo.Users;
+import com.wx.mini.pojo.UsersLikeVideos;
 import com.wx.mini.service.UserService;
 import com.wx.mini.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 /**
  * @auther alan.chen
@@ -20,6 +24,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UsersMapper usersMapper;
+    @Autowired
+    private UsersLikeVideosMapper usersLikeVideosMapper;
 
     @Autowired
     private Sid sid;
@@ -77,6 +83,20 @@ public class UserServiceImpl implements UserService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("id", userId);
         return usersMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public boolean isLikeUserVideo(String loginUserId, String videoId) {
+        Example example = new Example(UsersLikeVideos.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId", loginUserId);
+        criteria.andEqualTo("videoId", videoId);
+
+        List<UsersLikeVideos> list = usersLikeVideosMapper.selectByExample(example);
+        if(list != null && list.size() > 0) {
+            return true;
+        }
+        return false;
     }
 
 }
