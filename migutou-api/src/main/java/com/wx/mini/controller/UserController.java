@@ -1,5 +1,6 @@
 package com.wx.mini.controller;
 
+import com.wx.mini.pojo.UserReport;
 import com.wx.mini.pojo.Users;
 import com.wx.mini.service.UserService;
 import com.wx.mini.utils.IMoocJSONResult;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -184,6 +186,20 @@ public class UserController {
         userService.unfollowUser(publisherId, userId);
         return IMoocJSONResult.ok();
     }
+
+
+    /**
+     * 举报用户视频
+     *
+     * @return
+     */
+    @ApiOperation(value = "举报用户视频", notes = "举报用户视频接口")
+    @PostMapping("/reportUser")
+    public IMoocJSONResult reportUser(@RequestBody UserReport userReport) {
+        userService.reportUser(userReport);
+        return IMoocJSONResult.ok();
+    }
+
 
 
 }

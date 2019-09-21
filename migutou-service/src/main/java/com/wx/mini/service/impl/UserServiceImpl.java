@@ -1,12 +1,11 @@
 package com.wx.mini.service.impl;
 
 import com.wx.mini.idworker.Sid;
+import com.wx.mini.mapper.UserReportMapper;
 import com.wx.mini.mapper.UsersFansMapper;
 import com.wx.mini.mapper.UsersLikeVideosMapper;
 import com.wx.mini.mapper.UsersMapper;
-import com.wx.mini.pojo.Users;
-import com.wx.mini.pojo.UsersFans;
-import com.wx.mini.pojo.UsersLikeVideos;
+import com.wx.mini.pojo.*;
 import com.wx.mini.service.UserService;
 import com.wx.mini.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private UsersLikeVideosMapper usersLikeVideosMapper;
     @Autowired
     private UsersFansMapper usersFansMapper;
+    @Autowired
+    private UserReportMapper userReportMapper;
 
     @Autowired
     private Sid sid;
@@ -160,6 +162,18 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 举报用户视频
+     */
+    @Override
+    public void reportUser(UserReport userReport) {
+        if(userReport != null) {
+            userReport.setId(sid.nextShort());
+            userReport.setCreateDate(new Date());
+            userReportMapper.insert(userReport);
+        }
     }
 
 }

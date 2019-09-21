@@ -1,5 +1,6 @@
 package com.wx.mini.service;
 
+import com.wx.mini.pojo.UserReport;
 import com.wx.mini.pojo.Users;
 
 /**
@@ -24,4 +25,6 @@ public interface UserService {
     void unfollowUser(String publisherId, String userId);
 
     boolean isFollow(String userId, String publisherId);
+
+    void reportUser(UserReport userReport);
 }
