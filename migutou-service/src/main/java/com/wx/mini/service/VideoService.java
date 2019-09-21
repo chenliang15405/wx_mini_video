@@ -26,4 +26,8 @@ public interface VideoService {
     void likeVideo(String videoId, String publisherId, String userId);
 
     void unLikeVideo(String videoId, String publisherId, String userId);
+
+    PagedResult getAllLikeVideoByPage(Videos video, Integer page, Integer pageSize);
+
+    PagedResult getAllFollowVideoByPage(Videos video, Integer page, Integer pageSize);
 }

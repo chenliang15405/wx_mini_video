@@ -31,8 +31,32 @@
           <if test="videoDesc != null and videoDesc != ''">
             and v.video_desc like '%${videoDesc}%'
           </if>
+          <if test="userId != null and userId != ''">
+            and v.user_id = #{userId}
+          </if>
     order by v.create_time desc
 
+  </select>
+
+  <select id="getAllLikeVideoByPage" resultMap="BaseResultMap" parameterType="String">
+    select v1.*, u.face_image as face_image,u.nickname as nickname
+      from videos v1 left join users u on v1.user_id = u.id
+    where v1.id in (
+      select ulv.video_id from users_like_videos ulv where ulv.user_id = #{userId}
+    )
+    and v1.status = 1
+    order by v1.create_time desc
+  </select>
+
+
+  <select id="getAllFollowVideoByPage" resultMap="BaseResultMap" parameterType="String">
+    select v1.*, u.face_image as face_image,u.nickname as nickname
+    from videos v1 left join users u on v1.user_id = u.id
+    where v1.user_id in (
+      select uf.user_id from users_fans uf where uf.fan_id = #{userId}
+    )
+      and v1.status = 1
+    order by v1.create_time desc
   </select>
 
 </mapper>

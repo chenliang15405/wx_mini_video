@@ -1,13 +1,9 @@
 package com.wx.mini.controller;
 
-import com.wx.mini.pojo.Users;
 import com.wx.mini.pojo.Videos;
-import com.wx.mini.service.UserService;
 import com.wx.mini.service.VideoService;
 import com.wx.mini.utils.IMoocJSONResult;
 import com.wx.mini.utils.PagedResult;
-import com.wx.mini.vo.PublisherVo;
-import com.wx.mini.vo.UserVo;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -118,7 +114,7 @@ public class VideoController {
         if(page == null) {
             page = 1;
         }
-        Integer pageSize = 5;
+        Integer pageSize = 6;
         PagedResult pagedResult = videoService.getAllVideosByPage(video, isSaveKeyboard, page, pageSize);
         return IMoocJSONResult.ok(pagedResult);
     }
@@ -181,6 +177,43 @@ public class VideoController {
         videoService.unLikeVideo(videoId, publisherId, userId);
 
         return IMoocJSONResult.ok();
+    }
+
+
+    /**
+     * 获取分页video列表 点赞列表
+     *
+     * @param video
+     * @param page
+     * @return
+     */
+    @ApiImplicitParam(name = "page", value = "当前页数", required = true, dataType = "Integer", paramType = "form")
+    @PostMapping("/showAllLikeVideo")
+    public IMoocJSONResult pageLikeVideo(@RequestBody Videos video, Integer page) {
+        if(page == null) {
+            page = 1;
+        }
+        Integer pageSize = 6;
+        PagedResult pagedResult = videoService.getAllLikeVideoByPage(video, page, pageSize);
+        return IMoocJSONResult.ok(pagedResult);
+    }
+
+    /**
+     * 获取分页video列表 关注列表
+     *
+     * @param video
+     * @param page
+     * @return
+     */
+    @ApiImplicitParam(name = "page", value = "当前页数", required = true, dataType = "Integer", paramType = "form")
+    @PostMapping("/showAllFollowVideo")
+    public IMoocJSONResult pageFollowVideo(@RequestBody Videos video, Integer page) {
+        if(page == null) {
+            page = 1;
+        }
+        Integer pageSize = 6;
+        PagedResult pagedResult = videoService.getAllFollowVideoByPage(video, page, pageSize);
+        return IMoocJSONResult.ok(pagedResult);
     }
 
 

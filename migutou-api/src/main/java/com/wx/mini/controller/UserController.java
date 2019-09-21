@@ -83,17 +83,29 @@ public class UserController {
     }
 
 
+    /**
+     * 查询用户信息
+     *
+     * @param userId
+     * @param publisherId
+     * @return
+     */
     @ApiOperation(value = "查询用户信息", notes = "查询用户信息接口")
     @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String", paramType = "query")
     @GetMapping("/query")
-    public IMoocJSONResult query(String userId) {
+    public IMoocJSONResult query(String userId, String publisherId) {
         if(StringUtils.isBlank(userId)) {
             return IMoocJSONResult.errorMsg("用户id为空");
         }
-        Users user = userService.findById(userId);
+        Users user = userService.findById(publisherId);
 
         UserVo vo = new UserVo();
         BeanUtils.copyProperties(user, vo);
+
+        // 查询当前用户和视频发布用户有关注关系
+        boolean isFollow = userService.isFollow(userId, publisherId);
+        vo.setIsFollow(isFollow);
+
         return IMoocJSONResult.ok(vo);
     }
 
@@ -129,6 +141,48 @@ public class UserController {
         vo.setLikeVideo(isLike);
 
         return IMoocJSONResult.ok(vo);
+    }
+
+    /**
+     * 关注 用户
+     *
+     * @param publisherId 发布视频用户id
+     * @param userId 当前操作用户id
+     * @return
+     */
+    @ApiOperation(value = "关注用户", notes = "关注用户接口")
+    @ApiImplicitParams({ // query表示该参数是在url上面拼接的，path是路径上面的， form是表单中的参数
+            @ApiImplicitParam(name = "publisherId", value = "视频发布者用户id", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "userId", value = "登录用户ID", required = true, dataType = "String", paramType = "form"),
+    })
+    @PostMapping("/follow")
+    public IMoocJSONResult follow(@RequestParam("publisherId") String publisherId,@RequestParam("userId") String userId) {
+        if(StringUtils.isBlank(publisherId) || StringUtils.isBlank(userId)) {
+            return IMoocJSONResult.errorMsg("用户数据异常");
+        }
+        userService.followUser(publisherId, userId);
+        return IMoocJSONResult.ok();
+    }
+
+    /**
+     * 取关 用户
+     *
+     * @param publisherId 发布视频用户id
+     * @param userId 当前操作用户id
+     * @return
+     */
+    @ApiOperation(value = "取消关注用户", notes = "取消关注用户接口")
+    @ApiImplicitParams({ // query表示该参数是在url上面拼接的，path是路径上面的， form是表单中的参数
+            @ApiImplicitParam(name = "publisherId", value = "视频发布者用户id", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "userId", value = "登录用户ID", required = true, dataType = "String", paramType = "form"),
+    })
+    @PostMapping("/unfollow")
+    public IMoocJSONResult unfollow(@RequestParam("publisherId") String publisherId,@RequestParam("userId") String userId) {
+        if(StringUtils.isBlank(publisherId) || StringUtils.isBlank(userId)) {
+            return IMoocJSONResult.errorMsg("用户数据异常");
+        }
+        userService.unfollowUser(publisherId, userId);
+        return IMoocJSONResult.ok();
     }
 
 

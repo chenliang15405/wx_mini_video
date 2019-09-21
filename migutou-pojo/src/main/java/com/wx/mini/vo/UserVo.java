@@ -35,6 +35,9 @@ public class UserVo {
     @ApiModelProperty(hidden = true)
     private Integer receiveLikeCounts;
 
+    @ApiModelProperty(hidden = true)
+    private boolean isFollow;
+
     public String getId() {
         return id;
     }
@@ -105,5 +108,13 @@ public class UserVo {
 
     public void setReceiveLikeCounts(Integer receiveLikeCounts) {
         this.receiveLikeCounts = receiveLikeCounts;
+    }
+
+    public boolean getIsFollow() {
+        return isFollow;
+    }
+
+    public void setIsFollow(boolean follow) {
+        isFollow = follow;
     }
 }

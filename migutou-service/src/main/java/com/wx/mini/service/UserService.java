@@ -18,4 +18,10 @@ public interface UserService {
     Users findById(String userId);
 
     boolean isLikeUserVideo(String loginUserId, String videoId);
+
+    void followUser(String publisherId, String userId);
+
+    void unfollowUser(String publisherId, String userId);
+
+    boolean isFollow(String userId, String publisherId);
 }

@@ -169,6 +169,7 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public PagedResult getAllVideosByPage(Videos video, Integer isSaveKeyboard, int page, int pageSize) {
         String videoDesc = video.getVideoDesc();
+        String userId = video.getUserId();
 
         if(isSaveKeyboard != null && isSaveKeyboard == 1) {
             SearchRecords records = new SearchRecords();
@@ -181,7 +182,7 @@ public class VideoServiceImpl implements VideoService {
         // pageHelper的分页，是通过在执行Sql的时候，进行拦截，对不同的数据库执行不同的分页方法，相当于aop,
         // 然后查询的时候正常查询，查询全部数据即可，会通过pageHelper拦截封装之后，返回当前分页数据
         PageHelper.startPage(page, pageSize);
-        List<VideoVo> list = videosMapperCustomer.queryAllVideos(videoDesc);
+        List<VideoVo> list = videosMapperCustomer.queryAllVideos(videoDesc, userId);
 
         PageInfo<VideoVo> info = new PageInfo<>(list);
         PagedResult result = new PagedResult();
@@ -244,6 +245,58 @@ public class VideoServiceImpl implements VideoService {
 
         usersMapper.reduceReceiveLikeCount(publisherId);
         videosMapper.reduceLikeCount(videoId);
+    }
+
+    /**
+     * 点赞列表分页查询
+     *
+     * @param video
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PagedResult getAllLikeVideoByPage(Videos video, Integer page, Integer pageSize) {
+        String userId = video.getUserId();
+
+        PageHelper.startPage(page, pageSize);
+        List<VideoVo> list = videosMapperCustomer.getAllLikeVideoByPage(userId);
+
+        PageInfo<VideoVo> info = new PageInfo<>(list);
+        PagedResult result = new PagedResult();
+
+        result.setPage(page);
+        result.setTotalPages(info.getPages());
+        result.setRecords(info.getTotal());
+        result.setRows(list);
+
+        return result;
+    }
+
+    /**
+     * 关注列表 分页查询
+     *
+     * @param video
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PagedResult getAllFollowVideoByPage(Videos video, Integer page, Integer pageSize) {
+        String userId = video.getUserId();
+
+        PageHelper.startPage(page, pageSize);
+        List<VideoVo> list = videosMapperCustomer.getAllFollowVideoByPage(userId);
+
+        PageInfo<VideoVo> info = new PageInfo<>(list);
+        PagedResult result = new PagedResult();
+
+        result.setPage(page);
+        result.setTotalPages(info.getPages());
+        result.setRecords(info.getTotal());
+        result.setRows(list);
+
+        return result;
     }
 
 
