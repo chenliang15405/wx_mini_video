@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @auther alan.chen
- * @time 2019/9/10 9:50 AM
+ * @time 2019/9/10 9:50 AMd
  */
 public interface VideoService {
 

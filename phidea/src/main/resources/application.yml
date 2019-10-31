@@ -1,0 +1,56 @@
+server:
+  port: 8082
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  application:
+    name: ph-idea # 指定服务名称
+  datasource:
+    # url: jdbc:mysql://132.232.104.247:3306/tensquare_blog?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    # 不显式设置字符集，集成服务器配置，服务器的mysql已经设置为utf8mb4
+    url: jdbc:mysql://132.232.104.247:3306/wx_migutou_video?useUnicode=true&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: '!QAZ2wsx'
+    type: com.alibaba.druid.pool.DruidDataSource
+    platform: mysql
+    druid:
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      stat-view-servlet:
+        allow: true
+  # redis配置
+  redis:
+    host: 132.232.104.247
+    port: 6379
+    password: admin # 默认为空
+    database: 1
+    pool:
+      max-active: 1000
+      max-wait: -1 # 没有限制
+      max-idle: 10
+      min-idle: 2
+    timeout: 0
+# mybatis配置
+mybatis:
+  type-aliases-package: com.wx.mini.pojo
+  mapper-locations: classpath*:mapper/*.xml
+# 通用mapper配置
+mapper:
+  mappers: com.wx.mini.utils.MyMapper
+  not-empty: false
+  identity: MYSQL
+#分页插件配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  params: count=countsql
+  supportMethodsArguments: true
+# 其他配置
+user:
+  upload:
+    face:
+      fileSpace: /Users/alan.chen/Desktop/dmsData
+ffmpeg:
+  path: /Users/alan.chen/Documents/notes/ffmpeg

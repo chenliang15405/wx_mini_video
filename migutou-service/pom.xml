@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>migutou</artifactId>
-        <groupId>com.wx.mini.video</groupId>
+        <groupId>com.wx.mini</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,10 +13,29 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.wx.mini.video</groupId>
+            <groupId>com.wx.mini</groupId>
             <artifactId>migutou-mapper</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!--webmagic-->
+        <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>webmagic-core</artifactId>
+            <version>0.7.3</version>
+        </dependency>
+        <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>webmagic-extension</artifactId>
+            <version>0.7.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
     </dependencies>
 
 </project>
