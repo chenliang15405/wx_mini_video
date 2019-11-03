@@ -1,14 +1,11 @@
 package com.wx.mini.service.processor;
 
-import com.wx.mini.pojo.Do.CsdnBlog;
 import com.wx.mini.service.pipeline.CsdnArticlePipeline;
 import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
-
-import java.util.List;
 
 /**
  * @auther alan.chen

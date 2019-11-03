@@ -1,6 +1,6 @@
 package com.wx.mini.config;
 
-import com.wx.mini.apiData.EarthlySweetSentenceApi;
+import com.wx.mini.apiprocess.EarthlySweetSentenceApi;
 import com.wx.mini.job.AriticleCrawlerJob;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +8,8 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
 /**
- * @author roy.liu
- * @date 2018/11/20 20:08
- **/
-
+ * 设置job触发器及cron表达式
+ */
 @Component
 public class SchedulerAllJob {
     @Autowired
