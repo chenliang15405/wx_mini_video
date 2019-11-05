@@ -12,8 +12,8 @@ import java.util.Date;
  * @date 2019/10/31 6:14 PM
  */
 @Data
-@Table(name = "api_earthly_sweet")
-public class EarthlySweetApi {
+@Table(name = "api_coll_data")
+public class ApiCollData {
 
     @Id
     private Long id;

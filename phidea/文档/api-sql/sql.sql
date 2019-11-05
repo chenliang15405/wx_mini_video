@@ -2,8 +2,8 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`api_info` /*!40100 DEFAULT CHARACTER SE
 
 use api_info;
 
--- 用户表
-create table api_earthly_sweet (
+-- api 数据表
+create table api_coll_data (
 	id int (100) NOT NULL primary key AUTO_INCREMENT COMMENT '主键' ,
 	content varchar(255) not null comment '内容',
 	create_date date comment '创建日期',

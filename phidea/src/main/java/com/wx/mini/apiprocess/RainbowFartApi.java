@@ -10,25 +10,25 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
+ * 彩虹屁api
+ *
  * @author alan.chen
- * @date 2019/10/30 4:24 PM
+ * @date 2019/11/3 10:38 PM
  */
 @Slf4j
 @Component
-public class EarthlySweetSentenceApi implements Job {
+public class RainbowFartApi implements Job {
 
-
-    @Qualifier("earthlySweetApiServiceImpl")
+    @Qualifier("rainbowFartApiServiceImpl")
     @Autowired
     private ApiService apiService;
 
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        log.info("ApiCollData Job Start");
+        log.info("RainbowFartApi Job Start");
         apiService.handlerApi();
-        log.info("ApiCollData Job End");
+        log.info("RainbowFartApi Job End");
     }
-
 
 }

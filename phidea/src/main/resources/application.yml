@@ -59,3 +59,4 @@ ffmpeg:
 api:
   url:
     earthlySweetApi: https://api.lovelive.tools/api/SweetNothings/Serialization/:serializationType/:count
+    rainbowFartApi: https://chp.shadiao.app/api.php

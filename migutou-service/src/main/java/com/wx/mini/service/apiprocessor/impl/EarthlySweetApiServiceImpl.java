@@ -1,10 +1,11 @@
 package com.wx.mini.service.apiprocessor.impl;
 
 import com.google.common.collect.Lists;
-import com.wx.mini.mapper.apiprocess.EarthlySweetApiMapper;
+import com.wx.mini.mapper.apiprocess.ApiCollDataMapper;
 import com.wx.mini.pojo.Do.EarthSweetApiDo;
-import com.wx.mini.pojo.apiprocessor.EarthlySweetApi;
-import com.wx.mini.service.apiprocessor.EarthlySweetApiService;
+import com.wx.mini.pojo.apiprocessor.ApiCollData;
+import com.wx.mini.service.apiprocessor.ApiService;
+import com.wx.mini.utils.ApiCollDataUtil;
 import com.wx.mini.utils.JsonUtils;
 import com.wx.mini.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
@@ -24,15 +25,15 @@ import java.util.List;
  */
 @Transactional(rollbackFor = Exception.class)
 @Service
-public class EarthlySweetApiServiceImpl implements EarthlySweetApiService {
+public class EarthlySweetApiServiceImpl implements ApiService {
 
     @Autowired
-    private EarthlySweetApiMapper earthlySweetApiMapper;
+    private ApiCollDataMapper apiCollDataMapper;
 
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
-    private RedisOperator redisOperator;
+    private ApiCollDataUtil apiCollDataUtil;
 
     @Value("${api.url.earthlySweetApi}")
     private String EARTHLY_SWEET_API;
@@ -49,11 +50,11 @@ public class EarthlySweetApiServiceImpl implements EarthlySweetApiService {
             EarthSweetApiDo apiDo = JsonUtils.jsonToPojo(body, EarthSweetApiDo.class);
             System.out.println(apiDo);
             assert apiDo != null;
-            List<EarthlySweetApi> list = Lists.newArrayList();
+            List<ApiCollData> list = Lists.newArrayList();
             apiDo.getReturnObj().forEach(str -> {
-                boolean flag = duplicateRemove(str);
+                boolean flag = apiCollDataUtil.duplicateRemove(EARTHLY_SWEET_API_KEY_PREFIX, str);
                 if (flag) {
-                    EarthlySweetApi api = new EarthlySweetApi();
+                    ApiCollData api = new ApiCollData();
                     api.setContent(str);
                     api.setCreateDate(new Date());
                     api.setSource("土味情话");
@@ -61,25 +62,11 @@ public class EarthlySweetApiServiceImpl implements EarthlySweetApiService {
                 }
             });
             if(list.size() > 0) {
-                earthlySweetApiMapper.insertList(list);
+                apiCollDataMapper.insertList(list);
             }
         }
 
     }
 
-    /**
-     * 使用redis去重
-     *
-     * @param str 每句内容
-     */
-    private boolean duplicateRemove(String str) {
-        // 查询是否在redis中存在
-        String val = redisOperator.get(EARTHLY_SWEET_API_KEY_PREFIX + str);
-        if(StringUtils.isBlank(val)) {
-            redisOperator.set(EARTHLY_SWEET_API_KEY_PREFIX + str, str);
-            return true;
-        }
-        return false;
-    }
 
 }

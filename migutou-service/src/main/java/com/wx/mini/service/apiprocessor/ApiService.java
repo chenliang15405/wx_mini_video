@@ -2,9 +2,9 @@ package com.wx.mini.service.apiprocessor;
 
 /**
  * @author alan.chen
- * @date 2019/10/31 6:08 PM
+ * @date 2019/11/3 10:44 PM
  */
-public interface EarthlySweetApiService {
+public interface ApiService {
 
     void handlerApi();
 

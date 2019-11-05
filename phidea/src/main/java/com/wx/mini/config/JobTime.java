@@ -20,4 +20,6 @@ public class JobTime {
     private String articleCarwler;
 
     private String earthlySweetSentenceApi;
+
+    private String rainbowFartApi;
 }

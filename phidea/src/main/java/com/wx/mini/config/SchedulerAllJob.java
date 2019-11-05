@@ -1,6 +1,7 @@
 package com.wx.mini.config;
 
 import com.wx.mini.apiprocess.EarthlySweetSentenceApi;
+import com.wx.mini.apiprocess.RainbowFartApi;
 import com.wx.mini.job.AriticleCrawlerJob;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class SchedulerAllJob {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         scheduleJob1(scheduler);
         scheduleJob2(scheduler);
+        scheduleJob3(scheduler);
     }
 
 
@@ -41,6 +43,14 @@ public class SchedulerAllJob {
         JobDetail jobDetail = JobBuilder.newJob(EarthlySweetSentenceApi.class).withIdentity("EarthlySweetSentenceApi", "EarthlySweetSentenceApi-Job").build();
         CronScheduleBuilder cronSchedule = CronScheduleBuilder.cronSchedule(jobTime.getEarthlySweetSentenceApi());
         CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("EarthlySweetSentenceApi", "EarthlySweetSentenceApi-Job").withSchedule(cronSchedule).build();
+        scheduler.scheduleJob(jobDetail, cronTrigger);
+    }
+
+    private void scheduleJob3(Scheduler scheduler) throws SchedulerException {
+        System.out.println(jobTime.getRainbowFartApi());
+        JobDetail jobDetail = JobBuilder.newJob(RainbowFartApi.class).withIdentity("RainbowFartApi", "RainbowFartApi-Job").build();
+        CronScheduleBuilder cronSchedule = CronScheduleBuilder.cronSchedule(jobTime.getRainbowFartApi());
+        CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("RainbowFartApi", "RainbowFartApi-Job").withSchedule(cronSchedule).build();
         scheduler.scheduleJob(jobDetail, cronTrigger);
     }
 

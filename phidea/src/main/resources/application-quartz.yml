@@ -1,3 +1,4 @@
 quartz:
   articleCarwler: 0 1 1 1 1 ?
-  earthlySweetSentenceApi: 0 0/3 * * * ?
+  earthlySweetSentenceApi: 0 1 1 1 1 ?
+  rainbowFartApi: 0 0/1 * * * ?
