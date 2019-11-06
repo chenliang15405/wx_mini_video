@@ -38,7 +38,26 @@
             <optional>true</optional>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.java_websocket</groupId>
+            <artifactId>java_websocket</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/java_websocket.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.plural.jsonij</groupId>
+            <artifactId>jsonij</artifactId>
+            <version>0.3.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jsonij-0.3.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.mumu.kqbot</groupId>
+            <artifactId>kqbot</artifactId>
+            <version>0.0.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/kqbot-0.01.jar</systemPath>
+        </dependency>
 
 
 
@@ -51,5 +70,26 @@
 
 
     </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--第三方打包配置-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

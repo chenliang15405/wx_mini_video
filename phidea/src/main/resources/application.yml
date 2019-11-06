@@ -60,3 +60,7 @@ api:
   url:
     earthlySweetApi: https://api.lovelive.tools/api/SweetNothings/Serialization/:serializationType/:count
     rainbowFartApi: https://chp.shadiao.app/api.php
+kqHost: ws://127.0.0.1:25303
+robot:
+  weather:
+    url: https://www.mxnzp.com/weather/current/咸阳市
