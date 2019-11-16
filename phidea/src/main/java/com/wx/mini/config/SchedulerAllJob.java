@@ -3,6 +3,7 @@ package com.wx.mini.config;
 import com.wx.mini.apiprocess.EarthlySweetSentenceApi;
 import com.wx.mini.apiprocess.RainbowFartApi;
 import com.wx.mini.job.AriticleCrawlerJob;
+import com.wx.mini.robot.QQRobot;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -27,6 +28,7 @@ public class SchedulerAllJob {
         scheduleJob1(scheduler);
         scheduleJob2(scheduler);
         scheduleJob3(scheduler);
+        scheduleJob5(scheduler);
     }
 
 
@@ -54,5 +56,12 @@ public class SchedulerAllJob {
         scheduler.scheduleJob(jobDetail, cronTrigger);
     }
 
+    private void scheduleJob5(Scheduler scheduler) throws SchedulerException {
+        System.out.println(jobTime.getQqRobotMsgTimer());
+        JobDetail jobDetail = JobBuilder.newJob(QQRobot.class).withIdentity("QQRobot", "QQRobot-Job").build();
+        CronScheduleBuilder cronSchedule = CronScheduleBuilder.cronSchedule(jobTime.getQqRobotMsgTimer());
+        CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity("QQRobot", "QQRobot-Job").withSchedule(cronSchedule).build();
+        scheduler.scheduleJob(jobDetail, cronTrigger);
+    }
 
 }

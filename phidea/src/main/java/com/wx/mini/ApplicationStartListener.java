@@ -2,6 +2,7 @@ package com.wx.mini;
 
 import com.wx.mini.client.KQClient;
 import com.wx.mini.robot.QQRobot;
+import com.wx.mini.service.RobotMessageCollService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,12 +24,19 @@ public class ApplicationStartListener implements ApplicationListener<ContextRefr
 
     @Value("${kqHost}")
     private String kqHost;
+    @Autowired
+    private RobotMessageCollService robotMessageCollService;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         log.info("*************KQ CLIENT STSRT CONNECTION*****************" );
-        // 链接kqclient
-        qqRobot.runClient(kqHost);
+        try {
+            // 链接kqclient
+            qqRobot.runClient(kqHost);
+//            robotMessageCollService.getEarthSweetWord();
+        } catch (Exception e) {
+            log.error("启动Robot异常：{}", e);
+        }
         log.info("*************KQ CLIENT END*****************" );
     }
 

@@ -2,6 +2,7 @@ package com.wx.mini.client;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mumu.webclient.KQWebClient;
+import org.springframework.stereotype.Component;
 
 import java.net.URI;
 

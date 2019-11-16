@@ -22,4 +22,6 @@ public class JobTime {
     private String earthlySweetSentenceApi;
 
     private String rainbowFartApi;
+
+    private String qqRobotMsgTimer;
 }

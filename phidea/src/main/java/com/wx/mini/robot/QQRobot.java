@@ -1,7 +1,9 @@
 package com.wx.mini.robot;
 
-import com.wx.mini.client.MyQQAdapter;
 import com.wx.mini.client.RewriteKQWebClient;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +16,7 @@ import java.net.URI;
  * @date 2019/11/5 5:27 PM
  */
 @Component
-public class QQRobot {
+public class QQRobot implements Job {
 
     private RewriteKQWebClient kqWebClient;
 
@@ -41,5 +43,15 @@ public class QQRobot {
         }
     }
 
+
+    /**
+     * 定时任务
+     * @param jobExecutionContext
+     * @throws JobExecutionException
+     */
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        messageMng.timerTaskMsg();
+    }
 
 }

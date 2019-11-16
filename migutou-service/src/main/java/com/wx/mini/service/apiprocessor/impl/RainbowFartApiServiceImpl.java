@@ -3,6 +3,7 @@ package com.wx.mini.service.apiprocessor.impl;
 import com.wx.mini.mapper.apiprocess.ApiCollDataMapper;
 import com.wx.mini.pojo.apiprocessor.ApiCollData;
 import com.wx.mini.service.apiprocessor.ApiService;
+import com.wx.mini.service.apiprocessor.RainbowFartApiService;
 import com.wx.mini.utils.ApiCollDataUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author alan.chen
@@ -21,7 +24,7 @@ import java.util.Date;
 @Slf4j
 @Transactional(rollbackFor = Exception.class)
 @Service
-public class RainbowFartApiServiceImpl implements ApiService {
+public class RainbowFartApiServiceImpl implements ApiService, RainbowFartApiService {
 
     @Autowired
     private ApiCollDataMapper apiCollDataMapper;
@@ -51,6 +54,22 @@ public class RainbowFartApiServiceImpl implements ApiService {
                 apiCollDataMapper.insert(data);
             }
         }
+    }
+
+
+    @Override
+    public String getRainbowFartWord() {
+        Example example = new Example(ApiCollData.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("source", "彩虹屁");
+
+        List<ApiCollData> list = apiCollDataMapper.selectByExample(example);
+        if(list != null && list.size() > 0) {
+            // 随机返回一条
+            int index = (int) (Math.random() * list.size());
+            return list.get(index).getContent();
+        }
+        return null;
     }
 
 }

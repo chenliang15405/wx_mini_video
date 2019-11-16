@@ -2,6 +2,7 @@ package com.wx.mini.robot;
 
 import com.wx.mini.client.RewriteKQWebClient;
 import com.wx.mini.service.RobotMessageCollService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +26,11 @@ public class MessageMng {
      */
     public void appStartHandler(RewriteKQWebClient kqWebClient) {
         this.kqWebClient = kqWebClient;
-        sendSweetWordForYou();
         sendServiceMsg();
+    }
+
+    public void timerTaskMsg() {
+        sendSweetWordForYou();
     }
 
 
@@ -34,17 +38,37 @@ public class MessageMng {
      * 发送甜蜜话语
      */
     private void sendSweetWordForYou() {
+        StringBuilder msg = new StringBuilder();
         String weatherInfo = messageService.getWeatherInfo();
         String earthSweetStr = messageService.getEarthSweetWord();
+        if(StringUtils.isNotBlank(weatherInfo)) {
+            msg.append(weatherInfo);
+            msg.append("\n");
+            msg.append("\n");
+        }
+        if(StringUtils.isNotBlank(earthSweetStr)) {
+            msg.append("Sweet：" + earthSweetStr);
+        }
+        kqWebClient.sendPrivateMSG("1165243776", msg.toString());
     }
 
     /**
      * 服务消息
      */
     private void sendServiceMsg() {
-        kqWebClient.sendPrivateMSG("1165243776","你好，robot上线：\n请选择服务：\n 1.土味情话 \n 2. 彩虹屁 \n 3. 陪聊 \n 回复方式: ? + 序号");
+        kqWebClient.sendPrivateMSG("1165243776","你好，robot上线：\n请选择服务：\n 1.土味情话 \n 2. 彩虹屁 \n 3. 陪聊 \n \n回复方式: ? + 序号");
     }
 
+
+    /**
+     * 自动回复列表选择消息
+     *
+     * @param fromqq
+     * @param robotMsg
+     */
+    public void autoHandlerReplyMsg(String fromqq, String robotMsg) {
+        kqWebClient.sendPrivateMSG(fromqq,robotMsg);
+    }
 
 
 }

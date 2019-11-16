@@ -41,6 +41,8 @@
         <dependency>
             <groupId>org.java_websocket</groupId>
             <artifactId>java_websocket</artifactId>
+            <!--必须加上版本，否则maven打包或者clean报错-->
+            <version>0.0.1</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/java_websocket.jar</systemPath>
         </dependency>
@@ -68,7 +70,11 @@
             <scope>test</scope>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 

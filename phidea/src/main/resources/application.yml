@@ -63,4 +63,7 @@ api:
 kqHost: ws://127.0.0.1:25303
 robot:
   weather:
-    url: https://www.mxnzp.com/weather/current/咸阳市
+    url: https://www.mxnzp.com/api/weather/current/咸阳市
+  robotOption: 1
+  qingyunke:
+    api: http://api.qingyunke.com/api.php?key=free&appid=0&msg=%s
