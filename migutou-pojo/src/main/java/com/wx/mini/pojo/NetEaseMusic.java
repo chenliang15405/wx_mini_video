@@ -7,7 +7,7 @@ import lombok.Data;
  * @time 2019/10/10 5:41 PM
  */
 @Data
-public class Music {
+public class NetEaseMusic {
 
     private Integer	id;
     private String	songId;

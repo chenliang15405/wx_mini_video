@@ -88,7 +88,7 @@ public class RegistLoginController {
 
 		UserVo userVo = new UserVo();
 		BeanUtils.copyProperties(users, userVo);
-		userVo.setUserToken(token);
+		userVo.setToken(token);
 		return userVo;
 	}
 

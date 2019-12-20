@@ -19,7 +19,7 @@ public class UserVo {
     private String password;
 
     @ApiModelProperty(hidden = true)
-    private String userToken;
+    private String token;
 
     @ApiModelProperty(hidden = true)
     private String faceImage;
@@ -62,12 +62,12 @@ public class UserVo {
         this.password = password;
     }
 
-    public String getUserToken() {
-        return userToken;
+    public String getToken() {
+        return token;
     }
 
-    public void setUserToken(String userToken) {
-        this.userToken = userToken;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getFaceImage() {

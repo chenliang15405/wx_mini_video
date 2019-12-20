@@ -32,7 +32,7 @@ public class ApplicationStartListener implements ApplicationListener<ContextRefr
         log.info("*************KQ CLIENT STSRT CONNECTION*****************" );
         try {
             // 链接kqclient
-            qqRobot.runClient(kqHost);
+//            qqRobot.runClient(kqHost);
 //            robotMessageCollService.getEarthSweetWord();
         } catch (Exception e) {
             log.error("启动Robot异常：{}", e);

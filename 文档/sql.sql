@@ -79,3 +79,29 @@ create table comments(
 );
 
 
+-- Taro Music表
+create table taro_music(
+	id varchar(64) not null primary key,
+	name varchar(255),
+	user_id varchar(100),
+	music_desc varchar(255),
+	music_path varchar(255),
+	save_path varchar(255),
+	video_id varchar(100),
+	cover_path varchar(255),
+  like_counts int(20),
+  status int(1),
+  create_date DATETIME
+);
+
+-- tarovedio
+create table taro_video(
+	id varchar(100) NOT NULL primary key COMMENT '主键' ,
+	user_id varchar(100) COMMENT '用户id',
+	video_path varchar(255) comment '视频路径',
+	video_seconds float(6),
+	video_width int(6),
+	video_height int(6),
+	create_time DATETIME
+);
+

@@ -30,4 +30,9 @@ public interface VideoService {
     PagedResult getAllLikeVideoByPage(Videos video, Integer page, Integer pageSize);
 
     PagedResult getAllFollowVideoByPage(Videos video, Integer page, Integer pageSize);
+
+    String getVideoCovertImg(String videoUploadPath, String mvcShowPath);
+
+    String getAudioFromVideo(String videoUploadPath, String mvcShowPath);
+
 }

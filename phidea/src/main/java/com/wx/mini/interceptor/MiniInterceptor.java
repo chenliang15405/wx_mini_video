@@ -45,7 +45,7 @@ public class MiniInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         String userId = httpServletRequest.getHeader("userId");
-        String token = httpServletRequest.getHeader("userToken");
+        String token = httpServletRequest.getHeader("token");
         log.info("interceptor userId: {}  token: {}", userId, token);
         if(StringUtils.isBlank(userId) || StringUtils.isBlank(token)) {
             msgResponse(httpServletResponse, IMoocJSONResult.errorMsg("请登录"));

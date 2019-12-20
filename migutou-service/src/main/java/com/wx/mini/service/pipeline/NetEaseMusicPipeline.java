@@ -1,7 +1,7 @@
 package com.wx.mini.service.pipeline;
 
 import com.wx.mini.pojo.Comment;
-import com.wx.mini.pojo.Music;
+import com.wx.mini.pojo.NetEaseMusic;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
@@ -18,7 +18,7 @@ public class NetEaseMusicPipeline implements Pipeline {
 
         for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
             if (entry.getKey().equals("music")) {
-                Music music = (Music) entry.getValue();
+                NetEaseMusic music = (NetEaseMusic) entry.getValue();
 //                System.out.println("mMusicDao--->null" + mMusicDao == null);
 //                if (mMusicDao.countBySongId(music.getSongId()) == 0) {
 //                    mMusicDao.save(music);

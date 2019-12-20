@@ -6,17 +6,15 @@ import com.wx.mini.client.RewriteKQWebClient;
 import com.wx.mini.service.AiRobotService;
 import com.wx.mini.service.apiprocessor.EarthlySweetApiService;
 import com.wx.mini.service.apiprocessor.RainbowFartApiService;
+import com.wx.mini.utils.ApplicationContextHodler;
 import com.wx.mini.utils.QQConstant;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author alan.chen
  * @date 2019/11/4 6:48 PM
  */
 @Slf4j
-@Component
 public class MyQQAdapter extends KQMSGAdapter {
 
     private RewriteKQWebClient kqWebClient;
@@ -24,7 +22,6 @@ public class MyQQAdapter extends KQMSGAdapter {
     private static final String MSG_SYMBOL_CHI = "？";
     private static final String MSG_SYMBOL_ENG = "?";
 
-    // TODO 需要测试由spring实例化的和new是否是一个，可以用吗
     public MyQQAdapter() {
     }
 
@@ -32,15 +29,11 @@ public class MyQQAdapter extends KQMSGAdapter {
         this.kqWebClient = kqWebClient;
     }
 
-    // TODO 因为该对象是通过手动new的方式创建，所有不能通过spring自动注入bean, 需要通过applicationContent获取到spring的bean
-    @Autowired
-    private EarthlySweetApiService earthlySweetApiService;
-    @Autowired
-    private RainbowFartApiService rainbowFartApiService;
-    @Autowired
-    private MessageMng messageMng;
-    @Autowired
-    private AiRobotService aiRobotService;
+    // 因为该对象是通过手动new的方式创建，所有不能通过spring自动注入bean, 需要通过applicationContent获取到spring的bean
+    private static EarthlySweetApiService earthlySweetApiService = ApplicationContextHodler.getBean(EarthlySweetApiService.class).orElse(null);
+    private static RainbowFartApiService rainbowFartApiService  = ApplicationContextHodler.getBean(RainbowFartApiService.class).orElse(null);
+    private static MessageMng messageMng = ApplicationContextHodler.getBean(MessageMng.class).orElse(null);
+    private static AiRobotService aiRobotService = ApplicationContextHodler.getBean(AiRobotService.class).orElse(null);
 
 
     /**
@@ -71,7 +64,7 @@ public class MyQQAdapter extends KQMSGAdapter {
                         messageMng.autoHandlerReplyMsg(fromqq, "可以开始聊天啦，你想聊什么？");
                         break;
                     default:
-                        messageMng.autoHandlerReplyMsg(fromqq, "好像序号不太对吧");
+                        messageMng.autoHandlerReplyMsg(fromqq, "输的什么 不认识");
                 }
             } else {
                 // 如果回复的序号是其他数字

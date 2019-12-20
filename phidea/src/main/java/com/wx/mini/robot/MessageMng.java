@@ -49,14 +49,15 @@ public class MessageMng {
         if(StringUtils.isNotBlank(earthSweetStr)) {
             msg.append("Sweet：" + earthSweetStr);
         }
-        kqWebClient.sendPrivateMSG("1165243776", msg.toString());
+        kqWebClient.sendPrivateMSG("846799633", msg.toString());
     }
 
     /**
      * 服务消息
      */
     private void sendServiceMsg() {
-        kqWebClient.sendPrivateMSG("1165243776","你好，robot上线：\n请选择服务：\n 1.土味情话 \n 2. 彩虹屁 \n 3. 陪聊 \n \n回复方式: ? + 序号");
+//        kqWebClient.sendPrivateMSG("1165243776","你好，robot上线：\n请选择服务：\n 1.土味情话 \n 2. 彩虹屁 \n 3. 陪聊 \n \n回复方式: ? + 序号，例如: ?1");
+        kqWebClient.sendPrivateMSG("846799633","你好，robot上线：\n请选择服务：\n 1.土味情话 \n 2. 彩虹屁 \n 3. 陪聊 \n \n回复方式: ? + 序号，例如: ?1");
     }
 
 

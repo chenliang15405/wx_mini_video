@@ -77,6 +77,24 @@
         </dependency>
     </dependencies>
 
+    <!--多环境设置-->
+    <profiles>
+        <profile>
+            <id>production</id>
+            <properties>
+                <spring.profiles.active>production</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>development</id>
+            <properties>
+                <spring.profiles.active>development</spring.profiles.active>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>

@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import com.wx.mini.pojo.Comment;
-import com.wx.mini.pojo.Music;
+import com.wx.mini.pojo.NetEaseMusic;
 import com.wx.mini.service.pipeline.NetEaseMusicPipeline;
 import com.wx.mini.utils.NetEaseMusicUtils;
 import us.codecraft.webmagic.Page;
@@ -55,7 +55,7 @@ public class NetEaseMusicPageProcessor implements PageProcessor {
             page.addTargetRequests(page.getHtml().xpath("//div[@id=\"song-list-pre-cache\"]").links().regex(MUSIC_URL).all());
         } else {
             String url = page.getUrl().toString();
-            Music music = new Music();
+            NetEaseMusic music = new NetEaseMusic();
             // 单独对AJAX请求获取评论数, 使用JSON解析返回结果
             String songId = url.substring(url.indexOf("id=") + 3);
             int commentCount = getComment(page, songId, 0);

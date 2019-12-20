@@ -1,10 +1,16 @@
 package com.wx.mini.service.impl;
 
+import com.ffmpeg.common.audio.AudioOperation;
+import com.ffmpeg.common.response.Result;
+import com.ffmpeg.common.video.VideoOperation;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wx.mini.idworker.Sid;
 import com.wx.mini.mapper.*;
-import com.wx.mini.pojo.*;
+import com.wx.mini.pojo.Bgm;
+import com.wx.mini.pojo.SearchRecords;
+import com.wx.mini.pojo.UsersLikeVideos;
+import com.wx.mini.pojo.Videos;
 import com.wx.mini.service.BgmService;
 import com.wx.mini.service.VideoService;
 import com.wx.mini.utils.FFMpegCommon;
@@ -12,6 +18,7 @@ import com.wx.mini.utils.FetchVideoCover;
 import com.wx.mini.utils.PagedResult;
 import com.wx.mini.vo.VideoStatusEnum;
 import com.wx.mini.vo.VideoVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -53,6 +60,8 @@ public class VideoServiceImpl implements VideoService {
     @Value("${ffmpeg.path}")
     private String FFMPEG_EXE;
 
+    private VideoOperation videoOperator;
+    private AudioOperation audioOperation;
 
 
     /**
@@ -299,5 +308,52 @@ public class VideoServiceImpl implements VideoService {
         return result;
     }
 
+    /**
+     * 通过视频获取封面图
+     *
+     * @param videoUploadPath
+     * @return
+     */
+    @Override
+    public String getVideoCovertImg(String videoUploadPath, String mvcShowPath) {
+        String imgPath = generatePath(videoUploadPath, ".png");
+        if(StringUtils.isNotBlank(imgPath)) {
+            videoOperator = VideoOperation.builder(FFMPEG_EXE);
+            Result result = videoOperator.getVideoCoverImg(videoUploadPath, imgPath);
+            if(result.getCode() == 0) {
+                return imgPath;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 从视频中提取音频
+     *
+     * @param videoUploadPath
+     * @param mvcShowPath
+     * @return
+     */
+    @Override
+    public String getAudioFromVideo(String videoUploadPath, String mvcShowPath) {
+        String musicPath = generatePath(videoUploadPath, ".mp3");
+        if(StringUtils.isNotBlank(musicPath)) {
+            audioOperation = AudioOperation.builder(FFMPEG_EXE);
+            Result result = audioOperation.getBgmFromVideo(videoUploadPath, musicPath);
+            if(result.getCode() == 0) {
+                return musicPath;
+            }
+        }
+        return null;
+    }
+
+
+    private String generatePath(String sourcePath, String targetSuffix) {
+        String filename = sourcePath.substring(sourcePath.lastIndexOf(File.separator) + 1);
+        sourcePath = sourcePath.substring(0, sourcePath.lastIndexOf(File.separator));
+        filename = filename.split("\\.")[0];
+        String targetpath = sourcePath + File.separator +  filename + targetSuffix;
+        return targetpath;
+    }
 
 }

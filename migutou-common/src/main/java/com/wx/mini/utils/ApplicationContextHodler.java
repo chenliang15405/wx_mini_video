@@ -3,13 +3,17 @@ package com.wx.mini.utils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 /**
+ * 从Spring的IOC中获取指定的bean
+ *
  * @author alan.chen
  * @date 2019/11/16 7:30 PM
  */
+@Component
 public class ApplicationContextHodler implements ApplicationContextAware {
 
     private static ApplicationContext context;
