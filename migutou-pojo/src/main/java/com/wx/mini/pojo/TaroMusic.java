@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -11,6 +12,7 @@ import java.util.Date;
  * @date 2019/12/11 10:21 AM
  */
 @Data
+@Table(name = "taro_music")
 public class TaroMusic {
 
     /**

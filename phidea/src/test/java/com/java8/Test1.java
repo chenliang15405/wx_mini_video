@@ -1,5 +1,7 @@
 package com.java8;
 
+import org.junit.Test;
+
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -133,6 +135,17 @@ public class Test1 {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Test
+    public void fun1() {
+        String a = "1";
+        test1(a);
+        System.out.println(a);
+    }
+
+    private void test1(String a) {
+        a += "2";
     }
 
 

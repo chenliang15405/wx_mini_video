@@ -1,6 +1,7 @@
 package com.wx.mini.service;
 
 import com.wx.mini.pojo.TaroMusic;
+import com.wx.mini.utils.PagedResult;
 
 /**
  * @author alan.chen
@@ -12,4 +13,7 @@ public interface AudioService {
 
     void saveMusic(String userId, String musicId);
 
+    PagedResult getAudioListByPage(Integer page, Integer pageSize);
+
+    PagedResult getUserAudioListByPage(String userId, Integer page, Integer pageSize);
 }

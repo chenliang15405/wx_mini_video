@@ -351,7 +351,9 @@ public class VideoServiceImpl implements VideoService {
     private String generatePath(String sourcePath, String targetSuffix) {
         String filename = sourcePath.substring(sourcePath.lastIndexOf(File.separator) + 1);
         sourcePath = sourcePath.substring(0, sourcePath.lastIndexOf(File.separator));
+        // TODO 获取的sourcePath中包含2个.
         filename = filename.split("\\.")[0];
+//        filename = filename.substring(0, filename.lastIndexOf("."));
         String targetpath = sourcePath + File.separator +  filename + targetSuffix;
         return targetpath;
     }

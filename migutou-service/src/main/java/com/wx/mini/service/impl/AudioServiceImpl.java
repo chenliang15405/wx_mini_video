@@ -1,13 +1,18 @@
 package com.wx.mini.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wx.mini.idworker.Sid;
 import com.wx.mini.mapper.TaroMusicMapper;
+import com.wx.mini.mapper.TaroMusicMapperCustomer;
 import com.wx.mini.pojo.TaroMusic;
 import com.wx.mini.pojo.TaroVideo;
 import com.wx.mini.service.AudioService;
 import com.wx.mini.service.TaroVideoService;
 import com.wx.mini.service.VideoService;
+import com.wx.mini.utils.PagedResult;
 import com.wx.mini.utils.PathUtil;
+import com.wx.mini.vo.TaroMusicVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author alan.chen
@@ -33,6 +39,8 @@ public class AudioServiceImpl implements AudioService {
     private TaroVideoService taroVideoService;
     @Autowired
     private TaroMusicMapper taroMusicMapper;
+    @Autowired
+    private TaroMusicMapperCustomer taroMusicMapperCustomer;
 
 
     @Override
@@ -41,17 +49,18 @@ public class AudioServiceImpl implements AudioService {
         String coverImgPath = videoService.getVideoCovertImg(videoUploadPath, mvcShowPath);
         // 分离视频中音频
         String musicPath = videoService.getAudioFromVideo(videoUploadPath, mvcShowPath);
-        log.info("上传视频路径：{}, 生成封面图路径：{} , 生成音频路径：{}", videoUploadPath, coverImgPath, musicPath, randomFilename);
+        log.info("上传视频路径：[{}], 生成封面图路径：[{}] , 生成音频路径：[{}], 文件名称：[{}]", videoUploadPath, coverImgPath, musicPath, randomFilename);
         TaroMusic music = null;
         // 保存视频到视频表
         TaroVideo video = saveVideo(videoUploadPath, userId, randomFilename);
         if(video != null && StringUtils.isNotBlank(video.getId())) {
+            String fileName = randomFilename.split("\\.")[0];
             // 保存音频到音频表
             music = new TaroMusic();
             music.setId(Sid.next());
-            music.setCoverPath(coverImgPath);
+            music.setCoverPath(mvcShowPath + File.separator + fileName + ".png");
             music.setSavePath(musicPath);
-            music.setMusicPath(mvcShowPath + File.separator + randomFilename + ".mp3");
+            music.setMusicPath(mvcShowPath + File.separator + fileName + ".mp3");
             /// 确认时再更新用户的userId
             // music.setUserId(userId);
             music.setVideoId(video.getId());
@@ -82,6 +91,54 @@ public class AudioServiceImpl implements AudioService {
         taroMusicMapper.updateByPrimaryKeySelective(taroMusic);
     }
 
+    /**
+     * 分页查询数据
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PagedResult getAudioListByPage(Integer page, Integer pageSize) {
+
+        PageHelper.startPage(page, pageSize);
+        List<TaroMusicVo> list = taroMusicMapperCustomer.getAudioListByPage();
+
+        PageInfo<TaroMusicVo> info = new PageInfo<>(list);
+        PagedResult result = new PagedResult();
+
+        result.setPage(page);
+        result.setTotalPages(info.getPages());
+        result.setRecords(info.getTotal());
+        result.setRows(list);
+
+        return result;
+    }
+
+    /**
+     * 查询user对应的audio List
+     *
+     * @param userId
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PagedResult getUserAudioListByPage(String userId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+
+        List<TaroMusicVo> list = taroMusicMapperCustomer.getUserAudioListByPage(userId);
+        PageInfo<TaroMusicVo> info = new PageInfo<>(list);
+        PagedResult result = new PagedResult();
+
+        result.setPage(page);
+        result.setTotalPages(info.getPages());
+        result.setRecords(info.getTotal());
+        result.setRows(list);
+
+        return result;
+    }
+
 
     /**
      * 保存taro_video
@@ -92,7 +149,7 @@ public class AudioServiceImpl implements AudioService {
         String id = Sid.next();
         video.setId(id);
         video.setUserId(userId);
-        video.setVideoPath(PathUtil.generateTargetPath(videoUploadPath, randomFilename));
+        video.setVideoPath(videoUploadPath);
         video.setCreateTime(new Date());
         taroVideoService.save(video);
         return video;
